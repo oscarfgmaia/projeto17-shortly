@@ -9,8 +9,15 @@ function createUser(name, email, password) {
   );
 }
 
+function getUsers(){
+    return connectionDb.query(`
+        SELECT * FROM users;
+    `)
+}
+
 const userRepository ={
-    createUser
+    createUser,
+    getUsers
 }
 
 export default userRepository;
