@@ -1,5 +1,4 @@
 import { connectionDb } from "../database/database.js";
-import bcrypt from "bcrypt";
 
 function signUp(name, email, password) {
   return connectionDb.query(
@@ -29,16 +28,9 @@ function checkNameExists(name) {
   );
 }
 
-function getUsers() {
-  console.log(uuid());
-  return connectionDb.query(`
-        SELECT * FROM users;
-    `);
-}
 
 const userRepository = {
   signUp,
-  getUsers,
   checkEmailExists,
   checkNameExists,
 };
