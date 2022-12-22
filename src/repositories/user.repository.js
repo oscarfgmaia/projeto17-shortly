@@ -1,5 +1,7 @@
 import { connectionDb } from "../database/database.js";
-function createUser(name, email, password) {
+import bcrypt from "bcrypt";
+
+function signUp(name, email, password) {
   return connectionDb.query(
     `
           INSERT INTO users (name,email,password)
@@ -9,15 +11,36 @@ function createUser(name, email, password) {
   );
 }
 
-function getUsers(){
-    return connectionDb.query(`
-        SELECT * FROM users;
-    `)
+function checkEmailExists(email) {
+  return connectionDb.query(
+    `
+    SELECT * FROM users WHERE email ILIKE $1;
+  `,
+    [email]
+  );
 }
 
-const userRepository ={
-    createUser,
-    getUsers
+function checkNameExists(name) {
+  return connectionDb.query(
+    `
+    SELECT * FROM users WHERE name ILIKE $1;
+  `,
+    [name]
+  );
 }
+
+function getUsers() {
+  console.log(uuid());
+  return connectionDb.query(`
+        SELECT * FROM users;
+    `);
+}
+
+const userRepository = {
+  signUp,
+  getUsers,
+  checkEmailExists,
+  checkNameExists,
+};
 
 export default userRepository;
