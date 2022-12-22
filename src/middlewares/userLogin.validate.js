@@ -11,7 +11,7 @@ export default async function loginValidate(req, res, next) {
 
     const emailExists = await userRepository.checkEmailExists(req.body.email);
     if (emailExists.rowCount === 0) {
-      return res.sendStatus(401);
+      return res.sendStatus(404);
     }
     res.locals.user = emailExists;
     next();

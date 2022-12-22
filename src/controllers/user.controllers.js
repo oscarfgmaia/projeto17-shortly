@@ -1,6 +1,7 @@
 import userRepository from "../repositories/user.repository.js";
 import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
+import { nanoid } from "nanoid";
 
 export async function signUp(req, res) {
   const { name, email, password } = req.body;
@@ -19,8 +20,10 @@ export async function signIn(req, res) {
     const { password } = req.body;
     const userFound = res.locals.user;
     const hashPassword = userFound.rows[0].password;
+    const userId = userFound.rows[0].id;
     if (bcrypt.compareSync(password, hashPassword)) {
       const token = uuid();
+      await userRepository.startSession(userId, token);
       res.status(200).send(token);
     } else {
       res.sendStatus(401);
@@ -29,4 +32,9 @@ export async function signIn(req, res) {
     console.log(error);
     res.sendStatus(500);
   }
+}
+
+export async function shortenUrl(req, res) {
+  const user = res.locals.user;
+  console.log(user);
 }

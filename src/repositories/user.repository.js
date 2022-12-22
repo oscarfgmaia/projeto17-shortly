@@ -28,11 +28,42 @@ function checkNameExists(name) {
   );
 }
 
+function startSession(userId, token) {
+  return connectionDb.query(
+    `
+    INSERT INTO sessions ("userId",token) VALUES ($1,$2);
+  `,
+    [userId, token]
+  );
+}
+
+function getUserByToken(token) {
+  return connectionDb.query(
+    `
+    SELECT users.*,sessions.id as "sessionId" FROM users JOIN sessions 
+    ON users.id = sessions."userId"
+    WHERE sessions.token = $1;
+  `,
+    [token]
+  );
+}
+
+function insertUrls(userId, url, shortenUrl) {
+  return connectionDb.query(
+    `
+    INSERT INTO urls ("userId",url,"shortenedUrl") VALUES($1,$2,$3)
+  `,
+    [userId, url, shortenUrl]
+  );
+}
 
 const userRepository = {
   signUp,
+  startSession,
   checkEmailExists,
   checkNameExists,
+  getUserByToken,
+  insertUrls,
 };
 
 export default userRepository;
