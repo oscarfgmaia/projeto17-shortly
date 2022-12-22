@@ -35,6 +35,18 @@ export async function signIn(req, res) {
 }
 
 export async function shortenUrl(req, res) {
-  const user = res.locals.user;
-  console.log(user);
+  try {
+    const user = res.locals.user;
+    const userId = user.id;
+    const { url } = req.body;
+    const shortUrl = nanoid(8);
+    await userRepository.insertUrls(userId, url, shortUrl);
+    const responseObj = {
+      shortUrl: shortUrl,
+    };
+    res.status(201).send(responseObj);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
 }

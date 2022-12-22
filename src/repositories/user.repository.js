@@ -48,12 +48,12 @@ function getUserByToken(token) {
   );
 }
 
-function insertUrls(userId, url, shortenUrl) {
+function insertUrls(userId, url, shortUrl) {
   return connectionDb.query(
     `
     INSERT INTO urls ("userId",url,"shortenedUrl") VALUES($1,$2,$3)
   `,
-    [userId, url, shortenUrl]
+    [userId, url, shortUrl]
   );
 }
 
