@@ -57,6 +57,20 @@ function insertUrls(userId, url, shortUrl) {
   );
 }
 
+async function shortUrlExists(shortUrl) {
+  const urlFound = await connectionDb.query(
+    `
+    SELECT * FROM urls WHERE "shortUrl"=$1
+  `,
+    [shortUrl]
+  );
+  if (urlFound.rowCount === 0) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 const userRepository = {
   signUp,
   startSession,
@@ -64,6 +78,7 @@ const userRepository = {
   checkNameExists,
   getUserByToken,
   insertUrls,
+  shortUrlExists
 };
 
 export default userRepository;

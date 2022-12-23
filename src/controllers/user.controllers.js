@@ -40,11 +40,15 @@ export async function shortenUrl(req, res) {
     const userId = user.id;
     const { url } = req.body;
     const shortUrl = nanoid(8);
-    await userRepository.insertUrls(userId, url, shortUrl);
-    const responseObj = {
-      shortUrl: shortUrl,
-    };
-    res.status(201).send(responseObj);
+    if (await userRepository.shortUrlExists(shortUrl)) {
+      res.status(401).send("short url already registered");
+    } else {
+      await userRepository.insertUrls(userId, url, shortUrl);
+      const responseObj = {
+        shortUrl,
+      };
+      res.status(201).send(responseObj);
+    }
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
