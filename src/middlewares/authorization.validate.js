@@ -1,13 +1,7 @@
 import userRepository from "../repositories/user.repository.js";
-import urlSchema from "../schemas/url.schema.js";
 
-export default async function urlValidate(req, res, next) {
+export default async function authorizationValidate(req, res, next) {
   try {
-    const { error } = urlSchema.validate(req.body, { abortEarly: false });
-    if (error) {
-      const errors = error.details.map((detail) => detail.message);
-      return res.status(422).send(errors);
-    }
     const { authorization } = req.headers;
     const token = authorization?.replace("Bearer ", "");
     if (!token) {
