@@ -58,9 +58,12 @@ export async function shortenUrl(req, res) {
 export async function getProfile(req, res) {
   try {
     const user = res.locals.user;
-    console.log(user);
     const userFound = await userRepository.getProfile(user.id);
-    res.status(200).send(userFound.rows)
+    if (userFound.rowCount === 0) {
+      return res.sendStatus(404);
+    } else {
+      return res.status(200).send(userFound.rows);
+    }
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
