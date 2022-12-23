@@ -24,9 +24,11 @@ export async function getUrlById(req, res) {
 export async function deleteUrlById(req, res) {
   const user = res.locals.user;
   const { id } = req.params;
-  console.log(user);
   try {
     const urlFound = await urlRepository.getUrlById(id);
+    if (urlFound.rows[0].userId !== user.id) {
+      return res.sendStatus(401);
+    }
     if (urlFound.rowCount === 0) {
       return res.sendStatus(404);
     } else {
@@ -61,8 +63,8 @@ export async function rankUrlsByView(req, res) {
     const ranking = await urlRepository.getRanking();
     if (ranking.rowCount === 0) {
       res.status(404).send(ranking.rows);
-    }else{
-      res.status(200).send(ranking.rows)
+    } else {
+      res.status(200).send(ranking.rows);
     }
   } catch (error) {
     console.log(error);
