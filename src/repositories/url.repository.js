@@ -26,10 +26,20 @@ function increaseUrlVisitor(newVisitorCount, shortUrl) {
   );
 }
 
+function deleteUrlById(id) {
+  return connectionDb.query(
+    `
+    DELETE FROM urls WHERE id=$1;
+    `,
+    [id]
+  );
+}
+
 const urlRepository = {
   getUrlById,
   foundUrlByShortUrl,
   increaseUrlVisitor,
+  deleteUrlById,
 };
 
 export default urlRepository;

@@ -21,9 +21,27 @@ export async function getUrlById(req, res) {
   }
 }
 
+export async function deleteUrlById(req, res) {
+  const user = res.locals.user;
+  const { id } = req.params;
+  console.log(user);
+  try {
+    const urlFound = await urlRepository.getUrlById(id);
+    if (urlFound.rowCount === 0) {
+      return res.sendStatus(404);
+    } else {
+      await urlRepository.deleteUrlById(id);
+      res.sendStatus(204);
+    }
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+}
+
 export async function foundUrlByShortUrl(req, res) {
   try {
-    const {shortUrl} = req.params;
+    const { shortUrl } = req.params;
     const foundUrl = await urlRepository.foundUrlByShortUrl(shortUrl);
     if (foundUrl.rowCount === 0) {
       res.sendStatus(404);
