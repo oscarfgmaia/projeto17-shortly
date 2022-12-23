@@ -74,7 +74,13 @@ async function shortUrlExists(shortUrl) {
 function getProfile(id) {
   return connectionDb.query(
     `
-    SELECT users.id, users.name, json_agg(json_build_object('id',urls.id,"shortUrl",urls."shortUrl",'url',urls.url,"visitCount",urls."visitCount")) AS "shortnedUrls"
+    SELECT users.id, users.name, SUM(urls."visitCount") as "visitCount",
+    json_agg(
+      json_build_object(
+        'id',urls.id,'shortUrl',urls."shortUrl",'url',urls.url,'visitCount',urls."visitCount"
+      )
+    )
+    AS "shortnedUrls"
     FROM users
     JOIN urls
     ON users.id = urls."userId"

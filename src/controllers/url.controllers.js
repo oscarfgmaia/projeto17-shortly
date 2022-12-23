@@ -47,7 +47,6 @@ export async function foundUrlByShortUrl(req, res) {
       res.sendStatus(404);
     } else {
       const increasedvisitCount = foundUrl.rows[0].visitCount + 1;
-      console.log(`new visitCount is: ${increasedvisitCount}`);
       await urlRepository.increaseUrlVisitor(increasedvisitCount, shortUrl);
       res.redirect(foundUrl.rows[0].url);
     }
