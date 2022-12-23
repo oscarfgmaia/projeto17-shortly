@@ -34,12 +34,25 @@ function deleteUrlById(id) {
     [id]
   );
 }
+function getRanking() {
+  return connectionDb.query(`
+  SELECT users.id, users.name, COUNT(urls."shortUrl") AS "linksCount", COALESCE(SUM(urls."visitCount"),0) AS "visitCount"
+  FROM users
+  LEFT JOIN urls
+  ON users.id=urls."userId"
+  GROUP BY users.id
+  ORDER BY "visitCount" DESC
+  LIMIT 10
+  ;
+  `);
+}
 
 const urlRepository = {
   getUrlById,
   foundUrlByShortUrl,
   increaseUrlVisitor,
   deleteUrlById,
+  getRanking,
 };
 
 export default urlRepository;
