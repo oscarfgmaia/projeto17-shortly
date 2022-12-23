@@ -11,6 +11,5 @@ app.use(express.json());
 app.use(userRouter);
 app.use(urlRouter);
 
-const PORT = 5000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Running at port ${PORT}`));
- 
