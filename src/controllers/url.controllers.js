@@ -60,9 +60,9 @@ export async function rankUrlsByView(req, res) {
   try {
     const ranking = await urlRepository.getRanking();
     if (ranking.rowCount === 0) {
-      res.sendStatus(404);
-    } else {
-      res.status(200).send(ranking.rows);
+      res.status(404).send(ranking.rows);
+    }else{
+      res.status(200).send(ranking.rows)
     }
   } catch (error) {
     console.log(error);
