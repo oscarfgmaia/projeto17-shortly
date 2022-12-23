@@ -71,6 +71,20 @@ async function shortUrlExists(shortUrl) {
   }
 }
 
+function getProfile(id) {
+  return connectionDb.query(
+    `
+    SELECT users.id, users.name, json_agg(json_build_object('id',urls.id,"shortUrl",urls."shortUrl",'url',urls.url,"visitCount",urls."visitCount")) AS "shortnedUrls"
+    FROM users
+    JOIN urls
+    ON users.id = urls."userId"
+    WHERE users.id=$1
+    GROUP BY users.id
+  `,
+    [id]
+  );
+}
+
 const userRepository = {
   signUp,
   startSession,
@@ -78,7 +92,8 @@ const userRepository = {
   checkNameExists,
   getUserByToken,
   insertUrls,
-  shortUrlExists
+  shortUrlExists,
+  getProfile,
 };
 
 export default userRepository;

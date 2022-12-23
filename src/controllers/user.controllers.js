@@ -54,3 +54,15 @@ export async function shortenUrl(req, res) {
     res.sendStatus(500);
   }
 }
+
+export async function getProfile(req, res) {
+  try {
+    const user = res.locals.user;
+    console.log(user);
+    const userFound = await userRepository.getProfile(user.id);
+    res.status(200).send(userFound.rows)
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+}

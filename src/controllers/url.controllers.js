@@ -12,7 +12,7 @@ export async function getUrlById(req, res) {
       ...urlFound.rows[0],
     };
     delete responseObj.userId;
-    delete responseObj.visitors;
+    delete responseObj.visitCount;
     delete responseObj.createdAt;
     res.status(200).send(responseObj);
   } catch (error) {
@@ -46,9 +46,9 @@ export async function foundUrlByShortUrl(req, res) {
     if (foundUrl.rowCount === 0) {
       res.sendStatus(404);
     } else {
-      const increasedVisitors = foundUrl.rows[0].visitors + 1;
-      console.log(`new visitors is: ${increasedVisitors}`);
-      await urlRepository.increaseUrlVisitor(increasedVisitors, shortUrl);
+      const increasedvisitCount = foundUrl.rows[0].visitCount + 1;
+      console.log(`new visitCount is: ${increasedvisitCount}`);
+      await urlRepository.increaseUrlVisitor(increasedvisitCount, shortUrl);
       res.redirect(foundUrl.rows[0].url);
     }
   } catch (error) {

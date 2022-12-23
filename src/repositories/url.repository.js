@@ -20,7 +20,7 @@ function foundUrlByShortUrl(shortUrl) {
 function increaseUrlVisitor(newVisitorCount, shortUrl) {
   return connectionDb.query(
     `
-    UPDATE urls SET visitors=$1 WHERE "shortUrl"=$2;
+    UPDATE urls SET "visitCount"=$1 WHERE "shortUrl"=$2;
     `,
     [newVisitorCount, shortUrl]
   );
